@@ -13,6 +13,8 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+
+
 @app.get("/")
 def index():
     return {"greeting": "Hello world"}
