@@ -14,7 +14,8 @@ TXT_FILE = 'CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Ag
 
 def save_model():
     
-    model_name = "deepset/roberta-base-squad2"
+    #model_name = "deepset/roberta-base-squad2"
+    model_name = "deepset/bert-base-cased-squad2"
     
     model = AutoModelForQuestionAnswering.from_pretrained(model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -59,6 +60,8 @@ def get_output(question):
     }
     res = nlp(QA_input)
     
+    res['answer'] = res['answer'].replace(u'\xa0',' ')
+    
     executionTime = (time.time() - startTime)
     
     print('Execution time in seconds: ' + str(executionTime))
@@ -67,9 +70,11 @@ def get_output(question):
     
     return res
 
+
+
 if __name__ == "__main__":
     #save_model()
     #get_output('Why is model conversion important?')
     #save_contract('CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Agreement.pdf')
     #get_context('CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Agreement.txt')
-    get_output('When is expiration date?')
+    get_output('What is the jurisdiction of the agreement/contract?')
