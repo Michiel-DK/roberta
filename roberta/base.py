@@ -9,6 +9,9 @@ PATH_MODELS = os.path.join(ROOT_DIR, "models")
 PATH_PDF = os.path.join(ROOT_DIR, "pdf")
 PATH_TXT = os.path.join(ROOT_DIR, "txt")
 
+TXT_FILE = 'CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Agreement.txt'
+
+
 def save_model():
     
     model_name = "deepset/roberta-base-squad2"
@@ -20,7 +23,7 @@ def save_model():
     joblib.dump(tokenizer, f'{PATH_MODELS}/tokenizer_roberta')
     
 
-def get_txt(contract_path):
+def save_contract(contract_path):
     pdf = pdfplumber.open(f'{PATH_PDF}/{contract_path}')
     ls = []
     for i in pdf.pages:
@@ -32,7 +35,12 @@ def get_txt(contract_path):
     with open(f"{PATH_TXT}/{txt_path}", "w") as text_file:
         text_file.write(ls)
     
-    return ls
+
+def get_context(filename):
+    with open(f"{PATH_TXT}/{filename}" , encoding='utf8') as f:
+        content = f.read()
+    return content
+        
 
 
 def get_output(question):
@@ -40,16 +48,28 @@ def get_output(question):
     tokenizer = joblib.load( f'{PATH_MODELS}/tokenizer_roberta')
 
     nlp = pipeline('question-answering', model=model, tokenizer=tokenizer)
+    
+    context = get_context(TXT_FILE)
+    import time
+    startTime = time.time()
+    
     QA_input = {
         'question': question,
-        'context': 'The option to convert models between FARM and transformers gives freedom to the user and let people easily switch between frameworks.'
+        'context': context
     }
     res = nlp(QA_input)
     
+    executionTime = (time.time() - startTime)
+    
+    print('Execution time in seconds: ' + str(executionTime))
+    
     print(res)
+    
     return res
 
 if __name__ == "__main__":
     #save_model()
     #get_output('Why is model conversion important?')
-    get_txt('CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Agreement.pdf')
+    #save_contract('CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Agreement.pdf')
+    #get_context('CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Agreement.txt')
+    get_output('When is expiration date?')
