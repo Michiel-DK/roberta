@@ -17,10 +17,6 @@ app.add_middleware(
 def index():
     return {"greeting": "Hello world"}
 
-@app.get("/question_transformer")
-def question_transformer(question):
-    return get_output_base(question)
-
-@app.get("/question_farm")
-def question_farm(question):
-    return get_output_farm(question)
+@app.get("/question")
+def question(question):
+    return get_output(question)
