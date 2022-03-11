@@ -2,7 +2,7 @@ from transformers import AutoModelForQuestionAnswering, AutoTokenizer, pipeline
 import joblib
 import os
 import pdfplumber
-
+import time
 
 ROOT_DIR = os.path.dirname(__file__)
 PATH_MODELS = os.path.join(ROOT_DIR, "models")
@@ -43,7 +43,6 @@ def get_context(filename):
     return content
         
 
-
 def get_output(question):
     model = joblib.load(f'{PATH_MODELS}/model_roberta')
     tokenizer = joblib.load( f'{PATH_MODELS}/tokenizer_roberta')
@@ -51,7 +50,7 @@ def get_output(question):
     nlp = pipeline('question-answering', model=model, tokenizer=tokenizer)
     
     context = get_context(TXT_FILE)
-    import time
+    
     startTime = time.time()
     
     QA_input = {
@@ -73,7 +72,7 @@ def get_output(question):
 
 
 if __name__ == "__main__":
-    #save_model()
+    save_model()
     #get_output('Why is model conversion important?')
     #save_contract('CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Agreement.pdf')
     #get_context('CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Agreement.txt')
