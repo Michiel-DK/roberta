@@ -13,12 +13,14 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-
-
 @app.get("/")
 def index():
     return {"greeting": "Hello world"}
 
-@app.get("/question")
-def question(question):
-    return get_output(question)
+@app.get("/question_transformer")
+def question_transformer(question):
+    return get_output_base(question)
+
+@app.get("/question_farm")
+def question_farm(question):
+    return get_output_farm(question)
