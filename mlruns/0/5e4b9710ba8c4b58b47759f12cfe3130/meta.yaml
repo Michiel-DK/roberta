@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/michieldekoninck/code/Michiel-DK/roberta/mlruns/0/5e4b9710ba8c4b58b47759f12cfe3130/artifacts
+end_time: 1647002763172
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 5e4b9710ba8c4b58b47759f12cfe3130
+run_uuid: 5e4b9710ba8c4b58b47759f12cfe3130
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1647002759440
+status: 3
+tags: []
+user_id: michieldekoninck

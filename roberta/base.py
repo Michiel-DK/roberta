@@ -4,27 +4,30 @@ import os
 import pdfplumber
 import time
 
+
 ROOT_DIR = os.path.dirname(__file__)
 PATH_MODELS = os.path.join(ROOT_DIR, "models")
 PATH_PDF = os.path.join(ROOT_DIR, "pdf")
 PATH_TXT = os.path.join(ROOT_DIR, "txt")
+#MODEL_NAME = "deepset/roberta-base-squad2"
+MODEL_NAME = "deepset/bert-base-cased-squad2"
 
 TXT_FILE = 'CreditcardscomInc_20070810_S-1_EX-10.33_362297_EX-10.33_Affiliate Agreement.txt'
 
 
 def save_model():
-    
-    #model_name = "deepset/roberta-base-squad2"
-    model_name = "deepset/bert-base-cased-squad2"
-    
-    model = AutoModelForQuestionAnswering.from_pretrained(model_name)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    '''function to get model from HugginFace and save locally'''
+
+    model = AutoModelForQuestionAnswering.from_pretrained(MODEL_NAME)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     
     joblib.dump(model, f'{PATH_MODELS}/model_roberta')
     joblib.dump(tokenizer, f'{PATH_MODELS}/tokenizer_roberta')
     
 
 def save_contract(contract_path):
+    '''pdfplumber to convert pdf to list fo string and save locally as txt file'''
+    
     pdf = pdfplumber.open(f'{PATH_PDF}/{contract_path}')
     ls = []
     for i in pdf.pages:
@@ -38,12 +41,18 @@ def save_contract(contract_path):
     
 
 def get_context(filename):
+    '''function to read txt file and return variable with context'''
+    
     with open(f"{PATH_TXT}/{filename}" , encoding='utf8') as f:
         content = f.read()
     return content
         
 
+
 def get_output(question):
+    '''function to get answer via base bert model'''
+
+    
     model = joblib.load(f'{PATH_MODELS}/model_roberta')
     tokenizer = joblib.load( f'{PATH_MODELS}/tokenizer_roberta')
 
@@ -59,6 +68,7 @@ def get_output(question):
     }
     res = nlp(QA_input)
     
+    #clean answers
     res['answer'] = res['answer'].replace(u'\xa0',' ')
     
     executionTime = (time.time() - startTime)
